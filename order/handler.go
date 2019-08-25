@@ -18,10 +18,11 @@ type Config struct {
 	OpenNodeReadAPIKey string
 }
 
-//DepositRequest what you want to deposit
-type DepositRequest struct {
+//OrderRequest what you want to order
+type OrderRequest struct {
 	Amt      int    //amt in sats
 	Currency string // EUR or USD
+	Email    string //where to send vouchers to
 }
 
 func init() {
@@ -49,7 +50,7 @@ func DepositHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	req := DepositRequest{}
+	req := OrderRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		logrus.Error(err.Error())
