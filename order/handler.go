@@ -20,7 +20,7 @@ type Config struct {
 
 //OrderRequest what you want to order
 type OrderRequest struct {
-	Amt      int    //amt in sats
+	Amt      int    //amt in currency
 	Currency string // EUR or USD
 	Email    string //where to send vouchers to
 }
@@ -57,7 +57,14 @@ func DepositHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Something wrong", http.StatusInternalServerError)
 		return
 	}
-	chargeResp, err := on.CreateCharge(float64(req.Amt), req.Currency)
+	ch := opennode.Charge{
+		CallbackURL: "https://flitz-order-processor.kwintendebacker.now.sh/webhook?this=that&test=random",
+		Amount:      float64(req.Amt),
+		Currency:    req.Currency,
+		Email:       req.Email,
+		Description: "testtest",
+	}
+	chargeResp, err := on.CreateChargeAdvanced(ch)
 	if err != nil {
 		logrus.WithError(err).Info("something wrong")
 		http.Error(w, "something wrong", http.StatusInternalServerError)
