@@ -1,0 +1,51 @@
+{
+    "version": 2,
+    "builds": [{ "src": "*/*.go", "use": "@now/go" }],
+    "build": {
+      "env": {
+        "GIT_CREDENTIALS": "@git-credentials"
+      }
+    },
+    "env": {
+        "CONFIG_OPENNODEURL": "https://dev-api.opennode.co",
+        "CONFIG_OPENNODEAPIKEY": "@opennode-apikey-dev",
+        "CONFIG_OPENNODEREADAPIKEY": "@opennode-read-apikey-dev",
+        "CONFIG_URI": "mongodb+srv://<user>:<password>@cluster0-y9mrc.mongodb.net/test?retryWrites=true&w=majority",
+        "CONFIG_USER": "admin",
+        "CONFIG_PASSWORD": "@mongo-password",
+        "CONFIG_DATABASENAME": "tokendb",
+        "CONFIG_METADATACOLLECTIONNAME": "token_metadata-test"
+      },
+      "routes": [
+        { "src": "/order",
+          "headers": {
+                      "Access-Control-Allow-Methods": "POST, OPTIONS",
+                      "Access-Control-Allow-Origin": "*",
+                      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+          },
+          "dest": "order/handler.go" 
+        },
+        { 
+          "src": "/withdraw",
+          "dest": "withdraw/handler.go",
+          "headers": {
+                      "Access-Control-Allow-Methods": "POST,OPTIONS",
+                      "Access-Control-Allow-Origin": "*",
+                      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+          }
+        },
+        { 
+          "src": "/satoshivalue",
+          "dest": "getvalue/handler.go",
+          "headers": {
+                      "Access-Control-Allow-Methods": "POST,OPTIONS",
+                      "Access-Control-Allow-Origin": "*",
+                      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+          }
+        },
+        { 
+          "src": "/",
+          "status": 404
+        }
+      ]
+}
