@@ -8,6 +8,7 @@
     },
     "env": {
         "CONFIG_OPENNODEURL": "https://dev-api.opennode.co",
+        "CONFIG_CALLBACKURLTEMPLATE": "https://flitz-order-processor.kwintendebacker.now.sh/webhook?value=%d&amt=%d&currency=%s&email=%s",
         "CONFIG_OPENNODEAPIKEY": "@opennode-apikey-dev",
         "CONFIG_OPENNODEREADAPIKEY": "@opennode-read-apikey-dev",
         "CONFIG_URI": "mongodb+srv://<user>:<password>@cluster0-y9mrc.mongodb.net/test?retryWrites=true&w=majority",

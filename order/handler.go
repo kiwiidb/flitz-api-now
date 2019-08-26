@@ -2,6 +2,7 @@ package balance
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/kiwiidb/bliksem-library/opennode"
@@ -11,23 +12,26 @@ import (
 )
 
 var on *opennode.OpenNode
+var conf Config
 
 //Config for both tokens database and opennode api
 type Config struct {
-	OpenNodeURL        string
-	OpenNodeReadAPIKey string
+	OpenNodeURL         string
+	OpenNodeReadAPIKey  string
+	CallBackURLTemplate string
 }
 
 //OrderRequest what you want to order
 type OrderRequest struct {
-	Amt      int    //amt in currency
+	Amt      int    //amt of vouchers
+	Value    int    //value in currency
 	Currency string // EUR or USD
 	Email    string //where to send vouchers to
 }
 
 func init() {
 	//init opennode
-	conf := Config{}
+	conf = Config{}
 	m := multiconfig.EnvironmentLoader{}
 	err := m.Load(&conf)
 	if err != nil {
@@ -57,12 +61,13 @@ func DepositHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Something wrong", http.StatusInternalServerError)
 		return
 	}
+	cbURL := fmt.Sprintf(conf.CallBackURLTemplate, req.Value, req.Amt, req.Currency, req.Email)
 	ch := opennode.Charge{
-		CallbackURL: "https://flitz-order-processor.kwintendebacker.now.sh/webhook?this=that&test=random",
-		Amount:      float64(req.Amt),
+		CallbackURL: cbURL,
+		Amount:      float64(req.Amt * req.Value),
 		Currency:    req.Currency,
 		Email:       req.Email,
-		Description: "testtest",
+		Description: "Flitz cards order",
 	}
 	chargeResp, err := on.CreateChargeAdvanced(ch)
 	if err != nil {
