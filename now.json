@@ -36,6 +36,24 @@
           }
         },
         { 
+          "src": "/lnurl-primary/*",
+          "dest": "withdraw-lnurl/primaryhandler.go",
+          "headers": {
+                      "Access-Control-Allow-Methods": "GET",
+                      "Access-Control-Allow-Origin": "*",
+                      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+          }
+        },
+        { 
+          "src": "/lnurl-secondary/*",
+          "dest": "withdraw-lnurl/secondaryhandler.go",
+          "headers": {
+                      "Access-Control-Allow-Methods": "GET",
+                      "Access-Control-Allow-Origin": "*",
+                      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+          }
+        },
+        { 
           "src": "/satoshivalue",
           "dest": "getvalue/handler.go",
           "headers": {
