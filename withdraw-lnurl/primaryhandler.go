@@ -68,7 +68,7 @@ func PrimaryHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	authorized, euroValue, err := tdb.GetIfTokenAuthorized(collection, token)
 	if err != nil {
-		logrus.Error(err)
+		logrus.WithField("collection", collection).WithField("Token", token).Error(err)
 		http.Error(w, "Something wrong", http.StatusInternalServerError)
 		return
 	}
