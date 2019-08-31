@@ -61,7 +61,11 @@ type PrimaryResponse struct {
 //PrimaryHandler main handler for this lambda
 //redeem a token and withdraw your sats!
 func PrimaryHandler(w http.ResponseWriter, r *http.Request) {
-	collection, token := getCollectionAndToken(r.URL.Path)
+	collection, token, err := getCollectionAndToken(r.URL.Path)
+	if err != nil {
+		logrus.Error(err)
+		http.Error(w, "Bad request", http.StatusBadRequest)
+	}
 	authorized, euroValue, err := tdb.GetIfTokenAuthorized(collection, token)
 	if err != nil {
 		logrus.Error(err)
@@ -70,6 +74,7 @@ func PrimaryHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	if !authorized {
 		http.Error(w, "Token unauthorized", http.StatusUnauthorized)
+		return
 	}
 	//TODO add this whole thing to on library
 	btcPrice, err := on.GetEuroRate()
@@ -106,7 +111,11 @@ func PrimaryHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func getCollectionAndToken(path string) (collection string, token string) {
+func getCollectionAndToken(path string) (collection string, token string, err error) {
 	//path is /{lnurl-primary,lnurl-secondary}/collection/token, so 2 and 3
-	return strings.Split(path, "/")[2], strings.Split((path), "/")[3]
+	splittedRoute := strings.Split(path, "/")
+	if len(splittedRoute) < 3 {
+		return "", "", fmt.Errorf("Wrong number of route parameters in url %s", path)
+	}
+	return strings.Split(path, "/")[2], strings.Split((path), "/")[3], nil
 }
