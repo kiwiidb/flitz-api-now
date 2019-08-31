@@ -43,7 +43,7 @@ func init() {
 	}
 	m.PrintEnvs(conf)
 	logrus.Info(conf)
-	//err = tdb.Initialize(tdbconf)
+	err = tdb.Initialize(tdbconf)
 	if err != nil {
 		logrus.Fatal(err)
 	}
@@ -66,6 +66,7 @@ func PrimaryHandler(w http.ResponseWriter, r *http.Request) {
 		logrus.Error(err)
 		http.Error(w, "Bad request", http.StatusBadRequest)
 	}
+	logrus.Info(collection, token)
 	authorized, euroValue, err := tdb.GetIfTokenAuthorized(collection, token)
 	if err != nil {
 		logrus.Error(err)
