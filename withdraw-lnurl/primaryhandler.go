@@ -86,7 +86,7 @@ func PrimaryHandler(w http.ResponseWriter, r *http.Request) {
 	satoshiValue := int(float64(euroValue) / btcPrice * 1e8)
 	secondaryRoute := fmt.Sprintf("%s/%s/%s", "/lnurl-secondary", collection, token)
 	resp := PrimaryResponse{
-		Callback:        fmt.Sprintf("%s%s", r.URL.Host, secondaryRoute),
+		Callback:        fmt.Sprintf("%s%s", r.Host, secondaryRoute),
 		K1:              "", //not needed
 		MinWithdrawable: satoshiValue,
 		MaxWithdrawable: satoshiValue,
