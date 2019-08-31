@@ -1,7 +1,10 @@
 package withdrawlnurl
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/kiwiidb/bliksem-library/opennode"
 	"github.com/kiwiidb/bliksem-library/tokendb"
@@ -40,7 +43,7 @@ func init() {
 	}
 	m.PrintEnvs(conf)
 	logrus.Info(conf)
-	err = tdb.Initialize(tdbconf)
+	//err = tdb.Initialize(tdbconf)
 	if err != nil {
 		logrus.Fatal(err)
 	}
@@ -52,13 +55,48 @@ type PrimaryResponse struct {
 	K1              string
 	MaxWithdrawable int
 	MinWithdrawable int
-	Tag             string //Always "withDrawRequest"
+	Tag             string
 }
 
 //PrimaryHandler main handler for this lambda
 //redeem a token and withdraw your sats!
 func PrimaryHandler(w http.ResponseWriter, r *http.Request) {
-
+	collection, token := getCollectionAndToken(r.URL.Path)
+	authorized, euroValue, err := tdb.GetIfTokenAuthorized(collection, token)
+	if err != nil {
+		logrus.Error(err)
+		http.Error(w, "Something wrong", http.StatusInternalServerError)
+		return
+	}
+	if !authorized {
+		http.Error(w, "Token unauthorized", http.StatusUnauthorized)
+	}
+	//TODO add this whole thing to on library
+	btcPrice, err := on.GetEuroRate()
+	if err != nil {
+		logrus.Error(err.Error())
+		http.Error(w, "something wrong", http.StatusInternalServerError)
+		return
+	}
+	satoshiValue := int(float64(euroValue) / btcPrice * 1e8)
+	secondaryRoute := fmt.Sprintf("%s/%s/%s", "/lnurl-secondary", collection, token)
+	resp := PrimaryResponse{
+		Callback:        fmt.Sprintf("%s%s", r.URL.Host, secondaryRoute),
+		K1:              "", //not needed
+		MinWithdrawable: satoshiValue,
+		MaxWithdrawable: satoshiValue,
+		Tag:             "withdrawRequest",
+	}
+	respBytes, err := json.Marshal(resp)
+	if err != nil {
+		logrus.Error(err.Error())
+		http.Error(w, "something wrong", http.StatusInternalServerError)
+		return
+	}
+	w.Write(respBytes)
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	return
 	//TODO
 	//Extract token, collection from request route parameters
 	//
@@ -66,4 +104,9 @@ func PrimaryHandler(w http.ResponseWriter, r *http.Request) {
 	//Get fiat amt from voucher => convert to sat amt
 	//construct response and reply
 
+}
+
+func getCollectionAndToken(path string) (collection string, token string) {
+	//path is /{lnurl-primary,lnurl-secondary}/collection/token, so 2 and 3
+	return strings.Split(path, "/")[2], strings.Split((path), "/")[3]
 }

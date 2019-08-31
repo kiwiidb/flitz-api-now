@@ -87,6 +87,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Token already claimed", http.StatusUnauthorized)
 		return
 	}
+
+	//TODO add this whole thing to on library
 	btcPrice, err := on.GetEuroRate()
 	if err != nil {
 		logrus.Error(err.Error())

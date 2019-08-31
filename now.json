@@ -36,7 +36,7 @@
           }
         },
         { 
-          "src": "/lnurl-primary/*",
+          "src": "/lnurl-primary/[^/]+/[^/]+",
           "dest": "withdraw-lnurl/primaryhandler.go",
           "headers": {
                       "Access-Control-Allow-Methods": "GET",
@@ -45,7 +45,7 @@
           }
         },
         { 
-          "src": "/lnurl-secondary/*",
+          "src": "/lnurl-secondary/[^/]+/[^/]+",
           "dest": "withdraw-lnurl/secondaryhandler.go",
           "headers": {
                       "Access-Control-Allow-Methods": "GET",
