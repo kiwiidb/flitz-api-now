@@ -64,23 +64,40 @@ func PrimaryHandler(w http.ResponseWriter, r *http.Request) {
 	collection, token, err := getCollectionAndToken(r.URL.Path)
 	if err != nil {
 		logrus.Error(err)
-		http.Error(w, "Bad request", http.StatusBadRequest)
+		resp := SecondaryResponse{
+			Status: "ERROR",
+			Reason: "Bad Request",
+		}
+		writeResponse(w, resp, http.StatusInternalServerError)
+		return
 	}
 	authorized, euroValue, err := tdb.GetIfTokenAuthorized(token, collection)
 	if err != nil {
 		logrus.WithField("collection", collection).WithField("Token", token).Error(err)
-		http.Error(w, "Something wrong", http.StatusInternalServerError)
+		resp := SecondaryResponse{
+			Status: "ERROR",
+			Reason: "Internal Error",
+		}
+		writeResponse(w, resp, http.StatusInternalServerError)
 		return
 	}
 	if !authorized {
-		http.Error(w, "Token unauthorized", http.StatusUnauthorized)
+		resp := SecondaryResponse{
+			Status: "ERROR",
+			Reason: "Token not valid or already claimed",
+		}
+		writeResponse(w, resp, http.StatusInternalServerError)
 		return
 	}
 	//TODO add this whole thing to on library
 	btcPrice, err := on.GetEuroRate()
 	if err != nil {
 		logrus.Error(err.Error())
-		http.Error(w, "something wrong", http.StatusInternalServerError)
+		resp := SecondaryResponse{
+			Status: "ERROR",
+			Reason: "Error getting fiat rates",
+		}
+		writeResponse(w, resp, http.StatusInternalServerError)
 		return
 	}
 	satoshiValue := int(float64(euroValue) / btcPrice * 1e8)
@@ -92,6 +109,11 @@ func PrimaryHandler(w http.ResponseWriter, r *http.Request) {
 		MaxWithdrawable: satoshiValue,
 		Tag:             "withdrawRequest",
 	}
+	writeResponse(w, resp, http.StatusOK)
+	return
+}
+
+func writeResponse(w http.ResponseWriter, resp interface{}, status int) {
 	respBytes, err := json.Marshal(resp)
 	if err != nil {
 		logrus.Error(err.Error())
@@ -99,18 +121,9 @@ func PrimaryHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Write(respBytes)
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(status)
 	w.Header().Set("Content-Type", "application/json")
-	return
-	//TODO
-	//Extract token, collection from request route parameters
-	//
-	//look up if voucher is valid and active.
-	//Get fiat amt from voucher => convert to sat amt
-	//construct response and reply
-
 }
-
 func getCollectionAndToken(path string) (collection string, token string, err error) {
 	//path is /{lnurl-primary,lnurl-secondary}/collection/token, so 2 and 3
 	splittedRoute := strings.Split(path, "/")
