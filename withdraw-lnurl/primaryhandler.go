@@ -100,13 +100,13 @@ func PrimaryHandler(w http.ResponseWriter, r *http.Request) {
 		writeResponse(w, resp, http.StatusInternalServerError)
 		return
 	}
-	satoshiValue := int(float64(euroValue) / btcPrice * 1e8)
+	milliSatoshiValue := int(float64(euroValue)/btcPrice*1e8) * 1e3
 	secondaryRoute := fmt.Sprintf("%s/%s/%s", "/lnurl-secondary", collection, token)
 	resp := PrimaryResponse{
 		Callback:        fmt.Sprintf("https://%s%s", r.Host, secondaryRoute),
 		K1:              "", //not needed
-		MinWithdrawable: satoshiValue,
-		MaxWithdrawable: satoshiValue,
+		MinWithdrawable: milliSatoshiValue,
+		MaxWithdrawable: milliSatoshiValue,
 		Tag:             "withdrawRequest",
 	}
 	writeResponse(w, resp, http.StatusOK)
