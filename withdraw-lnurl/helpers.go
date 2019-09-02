@@ -11,7 +11,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func getCollectionAndToken(path string) (collection string, token string, err error) {
+//GetCollectionAndToken needs to be exported for zeit to work
+func GetCollectionAndToken(path string) (collection string, token string, err error) {
 	//path is /{lnurl-primary,lnurl-secondary}/collection/token, so 2 and 3
 	splittedRoute := strings.Split(path, "/")
 	if len(splittedRoute) < 3 {

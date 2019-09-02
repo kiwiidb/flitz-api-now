@@ -10,7 +10,7 @@ import (
 //PrimaryHandler main handler for this lambda
 //redeem a token and withdraw your sats!
 func PrimaryHandler(w http.ResponseWriter, r *http.Request) {
-	collection, token, err := getCollectionAndToken(r.URL.Path)
+	collection, token, err := GetCollectionAndToken(r.URL.Path)
 	if err != nil {
 		logrus.Error(err)
 		writeErrorResponse(w, "Bad Request", http.StatusInternalServerError)
