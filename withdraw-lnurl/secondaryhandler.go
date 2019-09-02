@@ -9,7 +9,7 @@ import (
 
 //SecondaryHandler as per LNURL specs
 func SecondaryHandler(w http.ResponseWriter, r *http.Request) {
-	collection, token, err := GetCollectionAndToken(r.URL.Path)
+	collection, token, err := getCollectionAndToken(r.URL.Path)
 	if err != nil {
 		logrus.Error(err)
 		writeErrorResponse(w, "Bad Request", http.StatusBadRequest)
