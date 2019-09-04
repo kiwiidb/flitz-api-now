@@ -1,6 +1,7 @@
 package withdrawlnurl
 
 import (
+	"fmt"
 	"math"
 	"net/http"
 
@@ -42,6 +43,19 @@ func SecondaryHandler(w http.ResponseWriter, r *http.Request) {
 		logrus.WithField("token", token).WithField("invoice amt", math.Round(totalFiatAmt)).WithField("token value", euroValue).Info("Request coming in for wrongly priced invoice")
 		writeErrorResponse(w, "Bad request", http.StatusBadRequest)
 		return
+	}
+	//TODO add all invoices
+	count, err := tdb.SetTokenClaimed(token, invoices[0], fmt.Sprintf("%v", *r), collection)
+	if err != nil {
+		logrus.Error(err.Error())
+		http.Error(w, "Something wrong", http.StatusInternalServerError)
+		return
+	}
+	if count != 1 {
+		logrus.WithError(err).Error("SOMETHING FISHY GOING ON HERE")
+		http.Error(w, "Something wrong", http.StatusInternalServerError)
+		return
+
 	}
 	for _, inv := range invoices {
 		wd, err := on.Withdraw(inv)
