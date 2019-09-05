@@ -18,11 +18,11 @@ import (
 
 //PrimaryResponse as per LNURL spec for withdrawing
 type PrimaryResponse struct {
-	Callback        string
-	K1              string
-	MaxWithdrawable int
-	MinWithdrawable int
-	Tag             string
+	Callback        string `json:"callback"`
+	K1              string `json:"k1"`
+	MaxWithdrawable int    `json:"maxWithdrawable"`
+	MinWithdrawable int    `json:"minWithdrawable"`
+	Tag             string `json:"tag"`
 }
 
 //SecondaryResponse as per LNURL spec for withdrawing
