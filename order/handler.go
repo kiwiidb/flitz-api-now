@@ -61,10 +61,16 @@ func DepositHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Something wrong", http.StatusInternalServerError)
 		return
 	}
-	cbURL := fmt.Sprintf(conf.CallBackURLTemplate, req.Value, req.Amt, req.Currency, req.Email)
+	voucherValue, fiatPrice, err := calculateFiatPriceAndVoucherValue(req)
+	if err != nil {
+		logrus.Error(err.Error())
+		http.Error(w, "Something wrong", http.StatusInternalServerError)
+		return
+	}
+	cbURL := fmt.Sprintf(conf.CallBackURLTemplate, voucherValue, req.Amt, req.Currency, req.Email)
 	ch := opennode.Charge{
 		CallbackURL: cbURL,
-		Amount:      float64(req.Amt * req.Value),
+		Amount:      fiatPrice,
 		Currency:    req.Currency,
 		Email:       req.Email,
 		Description: "Flitz cards order",
@@ -87,4 +93,20 @@ func DepositHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	return
+}
+
+//logic for how much profit we are making
+//1 dollar/euro per voucher
+//bulk vouchers have a value = face value - 2 split between reseller and us, so price for reseller is order value -1
+//single vouchers have value = face value, so buyer needs to add 1 dollar/euro
+//you can't buy 0 or a negative amount of vouchers
+//TODO: move to seperate service
+func calculateFiatPriceAndVoucherValue(order OrderRequest) (voucherValue int, fiatPrice float64, err error) {
+	if order.Amt == 1 {
+		return order.Value, float64(order.Value + 1), nil
+	}
+	if order.Amt > 1 {
+		return order.Value - 2, float64(order.Value - 1), nil
+	}
+	return 0, 0, fmt.Errorf("Wrong amt of vouchers")
 }
