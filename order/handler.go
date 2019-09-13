@@ -46,9 +46,9 @@ func init() {
 
 }
 
-//DepositHandler main handler for this lambda
-//deposit funds into OpenNode, only with firebase auth
-func DepositHandler(w http.ResponseWriter, r *http.Request) {
+//Handler main handler for this lambda
+//handle order, add charge to OpenNode
+func Handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
 		return
