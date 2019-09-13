@@ -18,11 +18,12 @@ import (
 
 //PrimaryResponse as per LNURL spec for withdrawing
 type PrimaryResponse struct {
-	Callback        string `json:"callback"`
-	K1              string `json:"k1"`
-	MaxWithdrawable int    `json:"maxWithdrawable"`
-	MinWithdrawable int    `json:"minWithdrawable"`
-	Tag             string `json:"tag"`
+	Callback           string `json:"callback"`
+	K1                 string `json:"k1"`
+	MaxWithdrawable    int    `json:"maxWithdrawable"`
+	MinWithdrawable    int    `json:"minWithdrawable"`
+	Tag                string `json:"tag"`
+	DefaultDescription string `json:"defaultDescription"`
 }
 
 //SecondaryResponse as per LNURL spec for withdrawing
@@ -98,11 +99,12 @@ func PrimaryHandler(w http.ResponseWriter, r *http.Request) {
 	milliSatoshiValue := int(float64(euroValue)/btcPrice*1e8) * 1e3
 	secondaryRoute := fmt.Sprintf("%s/%s/%s", "/lnurl-secondary", collection, token)
 	resp := PrimaryResponse{
-		Callback:        fmt.Sprintf("https://%s%s", r.Host, secondaryRoute),
-		K1:              "", //not needed
-		MinWithdrawable: milliSatoshiValue,
-		MaxWithdrawable: milliSatoshiValue,
-		Tag:             "withdrawRequest",
+		Callback:           fmt.Sprintf("https://%s%s", r.Host, secondaryRoute),
+		K1:                 "", //not needed
+		MinWithdrawable:    milliSatoshiValue,
+		MaxWithdrawable:    milliSatoshiValue,
+		Tag:                "withdrawRequest",
+		DefaultDescription: "Redeem Flitz Voucher",
 	}
 	writeResponse(w, resp, http.StatusOK)
 	return
