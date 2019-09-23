@@ -79,24 +79,20 @@ func PrimaryHandler(w http.ResponseWriter, r *http.Request) {
 		writeErrorResponse(w, "Bad Request", http.StatusInternalServerError)
 		return
 	}
-	authorized, euroValue, err := tdb.GetIfTokenAuthorized(token, collection)
+	t, err := tdb.GetIfTokenAuthorized(token, collection)
 	if err != nil {
 		logrus.WithField("collection", collection).WithField("Token", token).Error(err)
 		writeErrorResponse(w, "Internal Error", http.StatusInternalServerError)
 		return
 	}
-	if !authorized {
-		writeErrorResponse(w, "Token not valid or already claimed", http.StatusBadRequest)
-		return
-	}
 	//TODO add this whole thing to on library
-	btcPrice, err := on.GetEuroRate()
+	satValue, err := on.GetSatoshiValue(t.Value, t.Currency)
 	if err != nil {
 		logrus.Error(err.Error())
 		writeErrorResponse(w, "Error getting fiat rates", http.StatusInternalServerError)
 		return
 	}
-	milliSatoshiValue := int(float64(euroValue)/btcPrice*1e8) * 1e3
+	milliSatoshiValue := satValue * 1e3
 	secondaryRoute := fmt.Sprintf("%s/%s/%s", "/lnurl-secondary", collection, token)
 	resp := PrimaryResponse{
 		Callback:           fmt.Sprintf("https://%s%s", r.Host, secondaryRoute),
@@ -139,7 +135,7 @@ func writeResponse(w http.ResponseWriter, resp interface{}, status int) {
 }
 
 //first calculate the amount of sat, ask on for exchange rate, calculate value in euros
-func getFiatAmt(invoice string) (float64, error) {
+func getFiatAmt(invoice string, token tokendb.Token) (int, error) {
 	regexpp, _ := regexp.Compile("[0-9]+[munp]")
 	amt := regexpp.FindString(invoice)
 	intAmt, err := strconv.Atoi(amt[:len(amt)-1])
@@ -151,9 +147,5 @@ func getFiatAmt(invoice string) (float64, error) {
 	helperdict := map[string]float64{"m": 1e5, "u": 1e2, "n": 1e-1, "p": 1e-4}
 	satAmt := float64(intAmt) * helperdict[string(suffix)]
 	logrus.WithField("satamt", satAmt).Info("decoding invoice")
-	rate, err := on.GetEuroRate()
-	if err != nil {
-		return 0, nil
-	}
-	return rate * satAmt / 1e8, nil
+	return on.GetFiatValue(int(satAmt), token.Currency)
 }

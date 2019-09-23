@@ -93,8 +93,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "something wrong", http.StatusInternalServerError)
 		return
 	}
-	if int(fiatAmt != token.Value) {
-		logrus.WithField("token", req.Token).WithField("invoice amt", fiatAmt).WithField("token value", value).Info("Request coming in for wrongly priced invoice")
+	if fiatAmt != token.Value {
+		logrus.WithField("token", req.Token).WithField("invoice amt", fiatAmt).WithField("token value", token.Value).Info("Request coming in for wrongly priced invoice")
 		http.Error(w, "Value of invoice is wrong", http.StatusUnauthorized)
 		return
 	}
@@ -134,5 +134,5 @@ func getFiatAmt(invoice string, token tokendb.Token) (int, error) {
 	helperdict := map[string]float64{"m": 1e5, "u": 1e2, "n": 1e-1, "p": 1e-4}
 	satAmt := float64(intAmt) * helperdict[string(suffix)]
 	logrus.WithField("satamt", satAmt).Info("decoding invoice")
-	return on.GetFiatValue(satAmt, token.Currency)
+	return on.GetFiatValue(int(satAmt), token.Currency)
 }
