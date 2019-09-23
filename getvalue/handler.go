@@ -74,7 +74,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 
 	}
-	authorized, euroValue, err := tdb.GetIfTokenAuthorized(req.Token, req.CollectionName)
+	token, err := tdb.GetIfTokenAuthorized(req.Token, req.CollectionName)
 	if err != nil {
 		//not a real error possibly just wrong token
 		logrus.Error(err.Error())
@@ -82,20 +82,13 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Bad token", http.StatusUnauthorized)
 		return
 	}
-	if !authorized {
-		logrus.WithField("token", req.Token).Info("Request coming in for unauthorized token")
-		http.Error(w, "Token already claimed", http.StatusUnauthorized)
-		return
-	}
 
-	//TODO add this whole thing to on library
-	btcPrice, err := on.GetEuroRate()
+	satoshiValue, err := on.GetSatoshiValue(token.Value, token.Currency)
 	if err != nil {
 		logrus.Error(err.Error())
-		http.Error(w, "something wrong", http.StatusInternalServerError)
+		http.Error(w, "Something wrong getting fiat rates", http.StatusInternalServerError)
 		return
 	}
-	satoshiValue := int(float64(euroValue) / btcPrice * 1e8)
 	type rateresp struct {
 		Authorized   bool
 		SatoshiValue int

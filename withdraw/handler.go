@@ -3,7 +3,6 @@ package withdraw
 import (
 	"encoding/json"
 	"fmt"
-	"math"
 	"net/http"
 	"regexp"
 	"strconv"
@@ -79,7 +78,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	authorized, value, err := tdb.GetIfTokenAuthorized(req.Token, req.Collection)
+	token, err := tdb.GetIfTokenAuthorized(req.Token, req.Collection)
 	if err != nil {
 		//not a real error possibly just wrong token
 		logrus.Error(err.Error())
@@ -88,20 +87,14 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !authorized {
-		logrus.WithField("token", req.Token).Info("Request coming in for unauthorized token")
-		http.Error(w, "Token already claimed", http.StatusUnauthorized)
-		return
-	}
-
-	fiatAmt, err := getFiatAmt(req.Invoice)
+	fiatAmt, err := getFiatAmt(req.Invoice, token)
 	if err != nil {
 		logrus.WithError(err).Error("error decoding invoice")
 		http.Error(w, "something wrong", http.StatusInternalServerError)
 		return
 	}
-	if int(math.Round(fiatAmt)) != value {
-		logrus.WithField("token", req.Token).WithField("invoice amt", math.Round(fiatAmt)).WithField("token value", value).Info("Request coming in for wrongly priced invoice")
+	if int(fiatAmt != token.Value) {
+		logrus.WithField("token", req.Token).WithField("invoice amt", fiatAmt).WithField("token value", value).Info("Request coming in for wrongly priced invoice")
 		http.Error(w, "Value of invoice is wrong", http.StatusUnauthorized)
 		return
 	}
@@ -129,7 +122,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 }
 
 //first calculate the amount of sat, ask on for exchange rate, calculate value in euros
-func getFiatAmt(invoice string) (float64, error) {
+func getFiatAmt(invoice string, token tokendb.Token) (int, error) {
 	regexpp, _ := regexp.Compile("[0-9]+[munp]")
 	amt := regexpp.FindString(invoice)
 	intAmt, err := strconv.Atoi(amt[:len(amt)-1])
@@ -141,9 +134,5 @@ func getFiatAmt(invoice string) (float64, error) {
 	helperdict := map[string]float64{"m": 1e5, "u": 1e2, "n": 1e-1, "p": 1e-4}
 	satAmt := float64(intAmt) * helperdict[string(suffix)]
 	logrus.WithField("satamt", satAmt).Info("decoding invoice")
-	rate, err := on.GetEuroRate()
-	if err != nil {
-		return 0, nil
-	}
-	return rate * satAmt / 1e8, nil
+	return on.GetFiatValue(satAmt, token.Currency)
 }
