@@ -19,6 +19,8 @@ github.com/kiwiidb/bliksem-library/opennode v0.0.0-20190923171859-500bd6470487 h
 github.com/kiwiidb/bliksem-library/opennode v0.0.0-20190923171859-500bd6470487/go.mod h1:S5OM00zLCDNcB1UpWTWONzn5loGqVRd1fsbG9oVnV/0=
 github.com/kiwiidb/bliksem-library/opennode v0.0.0-20190926142639-a486b36241e6 h1:CY1kAQyQCW7lM3fLTklbUblt3pLKpjApv529XTsyd0c=
 github.com/kiwiidb/bliksem-library/opennode v0.0.0-20190926142639-a486b36241e6/go.mod h1:S5OM00zLCDNcB1UpWTWONzn5loGqVRd1fsbG9oVnV/0=
+github.com/kiwiidb/bliksem-library/opennode v0.0.0-20190926143234-3911a29efeed h1:tE4hydK18Kb2t/nU1VbUqv6SGuQa+E3WnK0tzxjwNWg=
+github.com/kiwiidb/bliksem-library/opennode v0.0.0-20190926143234-3911a29efeed/go.mod h1:S5OM00zLCDNcB1UpWTWONzn5loGqVRd1fsbG9oVnV/0=
 github.com/kiwiidb/bliksem-library/tokendb v0.0.0-20190923171859-500bd6470487 h1:4PH+2M8ZS9wwcPrAzzYui2MhCf0zGLZBkVGd+TkYxXY=
 github.com/kiwiidb/bliksem-library/tokendb v0.0.0-20190923171859-500bd6470487/go.mod h1:tJl/vrXsYESjHIexwebD0l2jjm94P/UBCuMhk14UtMg=
 github.com/kiwiidb/bliksem-library/tokendb v0.0.0-20190926142639-a486b36241e6 h1:3pLGpDi4NhS4Spj+danv1oENFqxZM7mnetC1TSTPM64=

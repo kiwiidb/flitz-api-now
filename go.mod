@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	github.com/google/go-cmp v0.3.1 // indirect
-	github.com/kiwiidb/bliksem-library/opennode v0.0.0-20190926142639-a486b36241e6
+	github.com/kiwiidb/bliksem-library/opennode v0.0.0-20190926143234-3911a29efeed
 	github.com/kiwiidb/bliksem-library/tokendb v0.0.0-20190926142639-a486b36241e6
 	github.com/koding/multiconfig v0.0.0-20171124222453-69c27309b2d7
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
