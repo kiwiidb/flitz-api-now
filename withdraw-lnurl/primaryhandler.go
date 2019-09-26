@@ -8,7 +8,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"math"
 
 	"github.com/kiwiidb/bliksem-library/opennode"
 	"github.com/kiwiidb/bliksem-library/tokendb"
