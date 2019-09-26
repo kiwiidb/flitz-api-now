@@ -3,10 +3,12 @@ package withdrawlnurl
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"net/http"
 	"regexp"
 	"strconv"
 	"strings"
+	"math"
 
 	"github.com/kiwiidb/bliksem-library/opennode"
 	"github.com/kiwiidb/bliksem-library/tokendb"
@@ -135,6 +137,7 @@ func writeResponse(w http.ResponseWriter, resp interface{}, status int) {
 }
 
 //first calculate the amount of sat, ask on for exchange rate, calculate value in euros
+//round to nearest int
 func getFiatAmt(invoice string, token tokendb.Token) (int, error) {
 	regexpp, _ := regexp.Compile("[0-9]+[munp]")
 	amt := regexpp.FindString(invoice)
@@ -147,5 +150,9 @@ func getFiatAmt(invoice string, token tokendb.Token) (int, error) {
 	helperdict := map[string]float64{"m": 1e5, "u": 1e2, "n": 1e-1, "p": 1e-4}
 	satAmt := float64(intAmt) * helperdict[string(suffix)]
 	logrus.WithField("satamt", satAmt).Info("decoding invoice")
-	return on.GetFiatValue(int(satAmt), token.Currency)
+	floatFiatValue, err := on.GetFiatValue(int(satAmt), token.Currency)
+	if err != nil {
+		return 0, err
+	}
+	return int(math.Round(floatFiatValue)), nil
 }
