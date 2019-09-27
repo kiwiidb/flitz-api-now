@@ -103,6 +103,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 //TODO: move to seperate service
 func calculateFiatPriceAndVoucherValue(order OrderRequest) (voucherValue int, fiatPrice float64, err error) {
 	if order.Amt == 1 {
+		if order.Value < 10 {
+			//this is free of charge
+			return order.Value, float64(order.Value), nil
+		}
 		return order.Value, float64(order.Value + 1), nil
 	}
 	if order.Amt > 1 {
