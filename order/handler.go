@@ -70,7 +70,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	cbURL := fmt.Sprintf(conf.CallBackURLTemplate, voucherValue, req.Amt, req.Currency, req.Email)
 	ch := opennode.Charge{
 		CallbackURL: cbURL,
-		Amount:      fiatPrice,
+		Amount:      fiatPrice * float64(req.Amt),
 		Currency:    req.Currency,
 		Email:       req.Email,
 		Description: "Flitz cards order",
