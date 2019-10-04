@@ -3,3 +3,4 @@
 3) Add metrics endpoint
 4) add rates endpoint
 5) add stats endpoint
+6) update README
