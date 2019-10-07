@@ -63,6 +63,15 @@
           }
         },
         { 
+          "src": "/metrics",
+          "dest": "metrics/handler.go",
+          "headers": {
+                      "Access-Control-Allow-Methods": "GET",
+                      "Access-Control-Allow-Origin": "*",
+                      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+          }
+        },
+        { 
           "src": "/",
           "status": 404
         }
