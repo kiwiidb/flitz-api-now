@@ -1,6 +1,7 @@
 package withdraw
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/kiwiidb/bliksem-library/tokendb"
@@ -27,7 +28,11 @@ func init() {
 //Handler main handler for this lambda
 //for gathering info about who comes to our site
 func Handler(w http.ResponseWriter, r *http.Request) {
-	err := tdb.AddEntryToCollection(*r, "metrics")
+	requeststring := fmt.Sprintf("%v", *r)
+	type reqToSave struct {
+		request string
+	}
+	err := tdb.AddEntryToCollection(reqToSave{request: requeststring}, "metrics")
 	if err != nil {
 		logrus.WithError(err).Error("error adding metric to database")
 	}
