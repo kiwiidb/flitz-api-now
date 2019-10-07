@@ -32,7 +32,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	type reqToSave struct {
 		request string
 	}
-	err := tdb.AddEntryToCollection(reqToSave{request: requestString}, "metrics")
+	metric := reqToSave{request: requestString}
+	err := tdb.AddEntryToCollection(metric, "metrics")
 	if err != nil {
 		logrus.WithError(err).Error("error adding metric to database")
 	}
