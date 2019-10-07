@@ -29,10 +29,10 @@ func init() {
 //for gathering info about who comes to our site
 func Handler(w http.ResponseWriter, r *http.Request) {
 	requestString := fmt.Sprintf("%v", *r)
-	type reqToSave struct {
-		request string
+	type Metric struct {
+		Request string
 	}
-	metric := reqToSave{request: requestString}
+	metric := Metric{Request: requestString}
 	logrus.Info(metric)
 	err := tdb.AddEntryToCollection(metric, "metrics")
 	if err != nil {
