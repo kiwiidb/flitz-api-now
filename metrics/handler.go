@@ -2,6 +2,7 @@ package withdraw
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/kiwiidb/bliksem-library/tokendb"
 	"github.com/koding/multiconfig"
@@ -27,7 +28,11 @@ func init() {
 //Handler main handler for this lambda
 //for gathering info about who comes to our site
 func Handler(w http.ResponseWriter, r *http.Request) {
-	err := tdb.AddEntryToCollection(r.Header, "metrics")
+	type Metric struct {
+		Header http.Header
+		TimeStamp time.Time
+	}
+	err := tdb.AddEntryToCollection(Metric{r.Header, time.Now()}, "metrics")
 	if err != nil {
 		logrus.WithError(err).Error("error adding metric to database")
 	}
