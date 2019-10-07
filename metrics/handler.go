@@ -33,6 +33,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		request string
 	}
 	metric := reqToSave{request: requestString}
+	logrus.Info(metric)
 	err := tdb.AddEntryToCollection(metric, "metrics")
 	if err != nil {
 		logrus.WithError(err).Error("error adding metric to database")
