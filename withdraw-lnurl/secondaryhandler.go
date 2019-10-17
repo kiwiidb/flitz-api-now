@@ -34,6 +34,7 @@ func SecondaryHandler(w http.ResponseWriter, r *http.Request) {
 		totalFiatAmt += value
 		//check value with value in db
 	}
+	logrus.Info(totalFiatAmt)
 	if totalFiatAmt != t.Value {
 		logrus.WithField("token", token).WithField("invoice amt", totalFiatAmt).WithField("token value", t.Value).Info("Request coming in for wrongly priced invoice")
 		writeErrorResponse(w, "Bad request", http.StatusBadRequest)

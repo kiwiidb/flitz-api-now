@@ -88,6 +88,7 @@ func PrimaryHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	//TODO add this whole thing to on library
 	satValue, err := on.GetSatoshiValue(t.Value, t.Currency)
+	logrus.Info(satValue)
 	if err != nil {
 		logrus.Error(err.Error())
 		writeErrorResponse(w, "Error getting fiat rates", http.StatusInternalServerError)
