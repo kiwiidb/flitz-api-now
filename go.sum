@@ -21,6 +21,8 @@ github.com/kiwiidb/bliksem-library/opennode v0.0.0-20190926142639-a486b36241e6 h
 github.com/kiwiidb/bliksem-library/opennode v0.0.0-20190926142639-a486b36241e6/go.mod h1:S5OM00zLCDNcB1UpWTWONzn5loGqVRd1fsbG9oVnV/0=
 github.com/kiwiidb/bliksem-library/opennode v0.0.0-20190926143234-3911a29efeed h1:tE4hydK18Kb2t/nU1VbUqv6SGuQa+E3WnK0tzxjwNWg=
 github.com/kiwiidb/bliksem-library/opennode v0.0.0-20190926143234-3911a29efeed/go.mod h1:S5OM00zLCDNcB1UpWTWONzn5loGqVRd1fsbG9oVnV/0=
+github.com/kiwiidb/bliksem-library/opennode v0.0.0-20191017112024-175af5df2ee7 h1:slOfCLKEFRrO79x5Op1j8ehzhoOXeRwhXTmHew2U71Y=
+github.com/kiwiidb/bliksem-library/opennode v0.0.0-20191017112024-175af5df2ee7/go.mod h1:S5OM00zLCDNcB1UpWTWONzn5loGqVRd1fsbG9oVnV/0=
 github.com/kiwiidb/bliksem-library/tokendb v0.0.0-20190923171859-500bd6470487 h1:4PH+2M8ZS9wwcPrAzzYui2MhCf0zGLZBkVGd+TkYxXY=
 github.com/kiwiidb/bliksem-library/tokendb v0.0.0-20190923171859-500bd6470487/go.mod h1:tJl/vrXsYESjHIexwebD0l2jjm94P/UBCuMhk14UtMg=
 github.com/kiwiidb/bliksem-library/tokendb v0.0.0-20190926142639-a486b36241e6 h1:3pLGpDi4NhS4Spj+danv1oENFqxZM7mnetC1TSTPM64=
@@ -31,6 +33,7 @@ github.com/koding/multiconfig v0.0.0-20171124222453-69c27309b2d7 h1:SWlt7BoQNASb
 github.com/koding/multiconfig v0.0.0-20171124222453-69c27309b2d7/go.mod h1:Y2SaZf2Rzd0pXkLVhLlCiAXFCLSXAIbTKDivVgff/AM=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1 h1:mweAR1A6xJ3oS2pRaGiHgQ4OO8tzTaLawm8vnODuwDk=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
+github.com/konsorten/go-windows-terminal-sequences v1.0.2 h1:DB17ag19krx9CFsz4o3enTrPXyIXCl+2iCXH/aMAp9s=
 github.com/konsorten/go-windows-terminal-sequences v1.0.2/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
@@ -83,6 +86,8 @@ golang.org/x/sys v0.0.0-20190924154521-2837fb4f24fe h1:6fAMxZRR6sl1Uq8U61gxU+kPT
 golang.org/x/sys v0.0.0-20190924154521-2837fb4f24fe/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20191005200804-aed5e4c7ecf9 h1:L2auWcuQIvxz9xSEqzESnV/QN/gNRXNApHi3fYwl2w0=
 golang.org/x/sys v0.0.0-20191005200804-aed5e4c7ecf9/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20191010194322-b09406accb47 h1:/XfQ9z7ib8eEJX2hdgFTZJ/ntt0swNk5oYBziWeTCvY=
+golang.org/x/sys v0.0.0-20191010194322-b09406accb47/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/text v0.3.2 h1:tW2bmiBqwgJj/UpqtC8EpXEZVYOwU0yG4iWbprSVAcs=
 golang.org/x/text v0.3.2/go.mod h1:bEr9sfX3Q8Zfm5fL9x+3itogRgK3+ptLWKqgva+5dAk=
