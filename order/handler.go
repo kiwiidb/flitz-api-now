@@ -68,6 +68,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	cbURL := fmt.Sprintf(conf.CallBackURLTemplate, voucherValue, req.Amt, req.Currency, req.Email, req.Value) //req.Value is "price" in the cbURL template
+	logrus.Info(cbURL)
 	ch := opennode.Charge{
 		CallbackURL: cbURL,
 		Amount:      fiatPrice * float64(req.Amt),

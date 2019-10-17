@@ -8,7 +8,7 @@
     },
     "env": {
         "CONFIG_OPENNODEURL": "https://api.opennode.co",
-        "CONFIG_CALLBACKURLTEMPLATE": "https://order-processor.flitz.cards/webhook?value=%d&amt=%d&currency=%s&email=%s&price=%s",
+        "CONFIG_CALLBACKURLTEMPLATE": "https://order-processor.flitz.cards/webhook?value=%d&amt=%d&currency=%s&email=%s&price=%d",
         "CONFIG_OPENNODEAPIKEY": "@opennode-apikey-production",
         "CONFIG_OPENNODEREADAPIKEY": "@opennode-read-apikey-production",
         "CONFIG_URI": "mongodb+srv://<user>:<password>@cluster0-y9mrc.mongodb.net/test?retryWrites=true&w=majority",
