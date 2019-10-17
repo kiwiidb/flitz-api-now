@@ -24,7 +24,7 @@ type Config struct {
 //OrderRequest what you want to order
 type OrderRequest struct {
 	Amt      int    //amt of vouchers
-	Value    int    //value in currency
+	Value    int    //What the customer is buying, NOT the real value of what the voucher will be redeemed for
 	Currency string // EUR or USD
 	Email    string //where to send vouchers to
 }
@@ -67,7 +67,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Something wrong", http.StatusInternalServerError)
 		return
 	}
-	cbURL := fmt.Sprintf(conf.CallBackURLTemplate, voucherValue, req.Amt, req.Currency, req.Email)
+	cbURL := fmt.Sprintf(conf.CallBackURLTemplate, voucherValue, req.Amt, req.Currency, req.Email, req.Value) //req.Value is "price" in the cbURL template
 	ch := opennode.Charge{
 		CallbackURL: cbURL,
 		Amount:      fiatPrice * float64(req.Amt),
