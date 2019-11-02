@@ -102,16 +102,17 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 //single vouchers have value = face value, so buyer needs to add 1 dollar/euro
 //you can't buy 0 or a negative amount of vouchers
 //TODO: move to seperate service
+//EDIT: make it free for now
 func calculateFiatPriceAndVoucherValue(order OrderRequest) (voucherValue int, fiatPrice float64, err error) {
 	if order.Amt == 1 {
 		if order.Value < 10 {
 			//this is free of charge
 			return order.Value, float64(order.Value), nil
 		}
-		return order.Value, float64(order.Value + 1), nil
+		return order.Value, float64(order.Value), nil
 	}
 	if order.Amt > 1 {
-		return order.Value - 2, float64(order.Value - 1), nil
+		return order.Value, float64(order.Value), nil
 	}
 	return 0, 0, fmt.Errorf("Wrong amt of vouchers")
 }
